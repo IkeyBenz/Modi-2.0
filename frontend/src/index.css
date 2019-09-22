@@ -1,0 +1,8 @@
+body {
+  background-color: green;
+}
+
+div.white-line {
+  background-color: white;
+  height: 2px;
+}
