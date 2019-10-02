@@ -16,9 +16,10 @@ class Lobby {
         this.addUser(socket.id, username);
       });
     });
-
   }
+
   addUser(userId, name) {
+    !this.creator && (this.creator = userId);
     this.users[userId] = name;
     this.broadcast.emit('updated-lobby', Object.values(this.users));
   }
@@ -27,15 +28,16 @@ class Lobby {
     delete this.users[userId];
     this.broadcast.emit('updated-lobby', Object.values(this.users));
   }
-
 }
 
 
 const LobbyManager = {
   lobbies: {},
-  addLobby(id, lobby) {
-    this.lobbies[id] = lobby;
+  addLobby() {
+    const lobbyId = randomLobbyId();
+    this.lobbies[lobbyId] = new Lobby(lobbyId);
     this.emitLobbyStatus();
+    return lobbyId;
   },
   removeLobby(id) {
     delete this.lobbies[id];
@@ -43,10 +45,10 @@ const LobbyManager = {
   },
   emitLobbyStatus() {
     io.of('/lobbies').emit('lobbies-changed', Object.keys(this.lobbies));
-  }
-}
+  },
+};
 
-io.of('/lobbies').on('connection', (socket) => {
+io.of('/lobbies').on('connection', () => {
   LobbyManager.emitLobbyStatus();
 });
 
@@ -54,19 +56,16 @@ io.of('/lobbies').on('connection', (socket) => {
 const randomLobbyId = () => {
   const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
   let code = '';
-  for (let i = 0; i < 4; i += 1)
-    code += letters[Math.floor(Math.random() * letters.length)];
+  for (let i = 0; i < 4; i += 1) { code += letters[Math.floor(Math.random() * letters.length)]; }
 
   // Unlikely, but just in case code is a duplicate
-  if (LobbyManager.lobbies[code])
-    return randomGameCode();
+  if (LobbyManager.lobbies[code]) { return randomLobbyId(); }
 
   return code;
-}
+};
 
 router.get('/create-lobby', (_, res) => {
-  const lobbyId = randomLobbyId();
-  LobbyManager.addLobby(lobbyId, new Lobby(lobbyId));
+  const lobbyId = LobbyManager.addLobby();
   res.json({ lobbyId });
 });
 
