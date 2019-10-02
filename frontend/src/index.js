@@ -9,11 +9,13 @@ import * as serviceWorker from './serviceWorker';
 
 import HomePage from './Home';
 import LobbyPage from './Lobby';
+import LobbiesPage from './Lobbies';
 
 ReactDOM.render(
-  
+
   <BrowserRouter>
     <Route exact path="/" component={HomePage} />
+    <Route exact path="/lobbies" component={LobbiesPage} />
     <Route path="/lobbies/:id" component={LobbyPage} />
   </BrowserRouter>,
 
