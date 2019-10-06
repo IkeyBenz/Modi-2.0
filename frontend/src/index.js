@@ -7,9 +7,9 @@ import './index.css';
 
 import * as serviceWorker from './serviceWorker';
 
-import HomePage from './Home';
-import LobbyPage from './Lobby';
-import LobbiesPage from './Lobbies';
+import HomePage from './pages/Home';
+import LobbyPage from './pages/Lobby';
+import LobbiesPage from './pages/Lobbies';
 
 ReactDOM.render(
 
