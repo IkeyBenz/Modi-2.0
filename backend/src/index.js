@@ -1,5 +1,8 @@
-const express = require('express');
-const socketio = require('socket.io');
+import express from 'express';
+import socketIO from 'socket.io';
+import 'dotenv/config';
+
+import useLobbyController from './controllers/Lobby';
 
 const app = express();
 const { PORT } = process.env;
@@ -11,12 +14,6 @@ const server = app.listen(PORT, () => {
   console.log(`Running backend on ${PORT}`);
 });
 
-const io = socketio(server);
+const io = new socketIO(server);
 
-
-module.exports = {
-  app,
-  io
-}
-
-app.use(require('./controllers/Lobby'));
+useLobbyController(app, io);

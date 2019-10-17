@@ -4,13 +4,5 @@ class ModiGame {
   }
 }
 
-class Player {
-  constructor(connectionId) {
-    this.connectionId = connectionId;
-    this.id = this.generateNewUserId();
-  }
-  generateNewUserId() {
 
-  }
-}
-
+export default ModiGame;
