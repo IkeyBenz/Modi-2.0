@@ -23,7 +23,7 @@ function HomePage() {
       <div className="my-5"></div>
 
       <div className="d-flex justify-content-around">
-        <button className="btn btn-secondary" onClick={() => createLobby()}>Create Lobby</button>
+        <a className="btn btn-secondary" href="/create-lobby">Create Lobby</a>
         <a className="btn btn-primary" href="/lobbies">Join Lobby</a>
       </div>
     </div>
