@@ -10,11 +10,6 @@ function HomePage() {
     username && localStorage.setItem('modi-username', username);
   }
 
-  const createLobby = async () => {
-    const { lobbyId } = await (await fetch('/create-lobby')).json();
-    window.location.replace(`/lobbies/${lobbyId}`);
-  }
-
   return (
     <div className="container-fluid">
       <h1 className="text-center">Modi</h1>
