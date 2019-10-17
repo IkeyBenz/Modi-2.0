@@ -33,11 +33,12 @@ class Lobby {
 
 const LobbyManager = {
   lobbies: {},
-  addLobby() {
-    const lobbyId = randomLobbyId();
+  addLobby(lobbyId = randomLobbyId()) {
+    if (lobbyId in this.lobbies) {
+      throw new Error('A lobby with that name already exists.');
+    }
     this.lobbies[lobbyId] = new Lobby(lobbyId);
     this.emitLobbyStatus();
-    return lobbyId;
   },
   removeLobby(id) {
     delete this.lobbies[id];
@@ -64,9 +65,14 @@ const randomLobbyId = () => {
   return code;
 };
 
-router.get('/create-lobby', (_, res) => {
-  const lobbyId = LobbyManager.addLobby();
-  res.json({ lobbyId });
+router.post('/create-lobby', (req, res) => {
+  const { lobbyName } = req.body;
+  try {
+    LobbyManager.addLobby(lobbyName);
+    res.json({ success: `Create lobby: ${lobbyName}` });
+  } catch (e) {
+    res.json({ error: e.message });
+  }
 });
 
 
