@@ -5,6 +5,7 @@ const app = express();
 const { PORT } = process.env;
 
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 const server = app.listen(PORT, () => {
   console.log(`Running backend on ${PORT}`);
