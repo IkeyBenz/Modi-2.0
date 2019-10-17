@@ -3,7 +3,6 @@ import path from 'path';
 
 export const create = async (lobbyName) => {
   const url = path.join(API_URL, 'create-lobby');
-  console.log(url);
   const requestConfig = {
     method: 'POST',
     headers: {
@@ -11,6 +10,16 @@ export const create = async (lobbyName) => {
     },
     body: JSON.stringify({ lobbyName })
   }
+  return await (await fetch(url, requestConfig)).json();
+}
 
+export const get = async (lobbyId) => {
+  const url = path.join(API_URL, 'lobbies', lobbyId);
+  const requestConfig = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }
   return await (await fetch(url, requestConfig)).json();
 }

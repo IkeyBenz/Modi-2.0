@@ -6,11 +6,10 @@ const CreateLobbyPage = () => {
   const [lobbyName, setLobbyName] = useState('');
 
   const createLobby = async () => {
-    const res = await create(lobbyName);
-    if (res.error) {
-      return alert(`Error: ${res.error}`);
-    }
-    window.location.replace(`/lobbies/${lobbyName}`);
+    const { success, error, lobbyId } = await create(lobbyName);
+    if (error)
+      return alert(`Error: ${error}`);
+    window.location.replace(`/lobbies/${lobbyId}`);
   }
 
   return (

@@ -21,12 +21,15 @@ function LobbiesPage() {
         </div>
         <div className="card-body">
           <ol className="list-group">
-            {lobbies.map((id, ind) => (
-              <li key={ind} className="list-group-item d-flex justify-content-between">
-                {ind + 1}) {id}
+            {lobbies.map(({ id, name }, ind) => (
+              <li key={id} className="list-group-item d-flex justify-content-between">
+                {ind + 1}) {name}
                 <a className="btn btn-primary" href={`/lobbies/${id}`}>Join &rarr;</a>
               </li>
             ))}
+            {!lobbies.length && (
+              <h6 className="text-muted">There are no lobbies available to join. <a href="/create-lobby">Create One</a></h6>
+            )}
           </ol>
         </div>
         <div className="card-footer">
