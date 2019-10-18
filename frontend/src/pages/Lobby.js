@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import io from 'socket.io-client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCrown } from '@fortawesome/free-solid-svg-icons';
-import io from 'socket.io-client';
+
+import { create } from '../api/game-interface';
 
 let socket;
 function LobbyPage({ match }) {
@@ -18,11 +20,19 @@ function LobbyPage({ match }) {
   socket.on('connect', () => {
     socket.emit('join-attempt', sessionStorage.getItem(`modi-${lobbyId}-username`));
     socket.on('updated-lobby', setLobbyInfo);
+    socket.on('player-id', (myPlayerId) => {
+      sessionStorage.setItem(`modi-${lobbyId}-playerId`, myPlayerId);
+      window.location.replace(`/games/${lobbyId}`);
+    });
   });
 
   const isAdmin = socket.id === creator;
-  const createGame = () => {
-
+  const createGame = async () => {
+    if (!isAdmin) return alert('You are not the lobby admin!');
+    const { error, gameId } = await create(lobbyId, socket.id);
+    if (error) {
+      alert(error);
+    }
   }
 
   return (
