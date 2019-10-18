@@ -1,8 +1,6 @@
-import InitializeLobbyClass from '../classes/Lobby';
+import Lobby from '../classes/Lobby';
 
 export default function useLobbyController(app, io) {
-
-  const Lobby = InitializeLobbyClass(io);
 
   io.of('/lobbies').on('connection', () => {
     Lobby.Manager.emitLobbyStatus();
@@ -18,11 +16,16 @@ export default function useLobbyController(app, io) {
     }
   });
 
-  app.get('/lobbies/:id', (req, res) => {
+  app.get('/lobbies/:id', _lobbyRequired, (req, res) => {
     const { id } = req.params;
-    if (!(id in Lobby.Manager.lobbies)) {
-      return res.json({ error: "Lobby doesn't exist" });
-    }
     res.json({ info: Lobby.Manager.lobbies[id].info });
   });
+
+  function _lobbyRequired(req, _, next) {
+    const { id } = req.params;
+    if (!(id in Lobby.Manager.lobbies)) {
+      return next("Lobby doesn't exist");
+    }
+    next();
+  }
 }
