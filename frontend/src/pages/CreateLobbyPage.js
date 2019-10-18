@@ -14,7 +14,7 @@ const CreateLobbyPage = () => {
 
   return (
     <div className="container-fluid">
-      <div className="card">
+      <div className="card mt-3">
         <div className="card-header">
           <h3 className="card-title">Create Lobby:</h3>
         </div>
