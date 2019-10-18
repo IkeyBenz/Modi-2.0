@@ -42,30 +42,43 @@ export default function InitializeLobbyClass(io) {
 
     constructor(id, name) {
       this.info = { id, name };
-      this.users = {};
+      this.players = {};
       this.broadcast = io.of(`/lobbies/${id}`);
 
       this.broadcast.on('connection', (socket) => {
-        console.log(`${this.info.name}'s users: ${this.users}`);
         socket.on('disconnect', () => {
-          this.removeUser(socket.id);
+          this.removePlayer(socket.id);
         });
         socket.on('join-attempt', (username) => {
-          this.addUser(socket.id, username);
+          this.addPlayer(socket.id, username);
         });
       });
     }
 
-    addUser(userId, name) {
+    addPlayer(userId, name) {
       !this.creator && (this.creator = userId);
-      this.users[userId] = name;
-      this.broadcast.emit('updated-lobby', Object.values(this.users));
+      this.players[userId] = name;
+      this._emitLobbyStatus();
     }
 
-    removeUser(userId) {
-      delete this.users[userId];
-      this.broadcast.emit('updated-lobby', Object.values(this.users));
-      !Object.keys(this.users).length && Lobby.Manager.removeLobby(this.info.id);
+    removePlayer(userId) {
+      delete this.players[userId];
+      if (this.creator === userId) {
+        const uids = Object.keys(this.players);
+        this.creator = uids.length && uids[this._randomIndex(uids.length)];
+      }
+      this._emitLobbyStatus();
+      !Object.keys(this.players).length && Lobby.Manager.removeLobby(this.info.id);
+    }
+    _randomIndex(max) {
+      return Math.floor(Math.random() * max);
+    }
+    _emitLobbyStatus() {
+      this.broadcast.emit('updated-lobby', {
+        lobbyName: this.info.name,
+        players: this.players,
+        creator: this.creator
+      });
     }
   }
 
