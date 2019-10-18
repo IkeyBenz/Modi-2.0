@@ -1,17 +1,23 @@
 class Player {
-  constructor(connectionId) {
-    this.connectionId = connectionId;
-    this.id = this.generateNewUserId();
+  static uids = new Set();
+
+  constructor(username) {
+    this.username = username;
+    this.uid = this._genUID()
+    this.lives = 3;
+    this.connectionId = null;
   }
-  generateNewUserId() {
+  _genUID() {
     const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
     let uid = '';
-    for (let i = 0; i < 4; i += 1) { code += letters[Math.floor(Math.random() * letters.length)]; }
+    for (let i = 0; i < 5; i++) {
+      uid += letters[Math.floor(Math.random() * letters.length)];
+    }
+    return Player.uids.has(uid) ? this._genUID() : Player.uids.add(uid) && uid;
+  }
 
-    // Unlikely, but just in case code is a duplicate
-    if (uid in this.lobbies) { return randomLobbyId(); }
-
-    return code;
+  set setConnectionId(id) {
+    this.connectionId = id;
   }
 
 }
