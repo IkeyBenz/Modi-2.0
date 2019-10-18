@@ -1,8 +1,8 @@
-// A function to create the Lobby class using an io object
-export default function InitializeLobbyClass(io) {
+var Lobby;
+export function initLobbyClass(io) {
 
   // A class for game lobbies
-  class Lobby {
+  Lobby = class Lobby {
 
     // Handles CRUDing of lobbies
     static Manager = {
@@ -81,6 +81,6 @@ export default function InitializeLobbyClass(io) {
       });
     }
   }
-
-  return Lobby;
 }
+
+export { Lobby as default }
