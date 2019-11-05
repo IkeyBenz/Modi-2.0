@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.css"],"names":[],"mappings":"AAAA,KACE,sBACF,CAEA,eACE,qBAAuB,CACvB,UACF","file":"main.39090102.chunk.css","sourcesContent":["body {\n  background-color: green;\n}\n\ndiv.white-line {\n  background-color: white;\n  height: 2px;\n}"]}
